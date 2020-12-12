@@ -44,8 +44,6 @@ func UpdateCitoyen(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(input)
-
 	models.DB.Model(&citoyen).Updates(input)
 
 	c.JSON(http.StatusOK, gin.H{"data": citoyen})
