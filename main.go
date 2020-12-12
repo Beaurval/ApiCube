@@ -1,16 +1,21 @@
 package main
 
 import (
+	"ApiCubes/controllers"
+	"ApiCubes/models"
+
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func main() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
-	})
+	models.ConnectDataBase()
 
+	r.GET("/citoyens", controllers.FindCitoyens)
+	r.GET("/citoyens/:id", controllers.FindCitoyen)
+	r.PATCH("/citoyens/:id", controllers.UpdateCitoyen)
+	r.POST("/citoyens", controllers.CreateCitoyen)
+	r.DELETE("/citoyens/:id", controllers.DeleteCitoyen)
 	r.Run()
 }
