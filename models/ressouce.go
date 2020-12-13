@@ -16,6 +16,7 @@ type Ressource struct {
 	CitoyenID      uint
 	Redacteur      Citoyen `gorm:"foreignkey:ID"`
 	Commentaires   []Commentaire
+	Tags           []Tag `gorm:"many2many:tags_ressources;"`
 }
 
 //CreateRessourceInput model de création de ressource

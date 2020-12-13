@@ -10,7 +10,7 @@ import (
 //FindRessources Récupérer toutes les ressources
 func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
-	models.DB.Preload("Commentaires").Preload("Relation").Preload("Redacteur").Find(&ressources)
+	models.DB.Preload("Commentaires").Preload("Relation").Preload("Redacteur").Preload("Tags").Find(&ressources)
 
 	c.JSON(http.StatusOK, gin.H{"data": ressources})
 }
@@ -19,7 +19,7 @@ func FindRessources(c *gin.Context) {
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("Commentaires").Preload("Relation").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("Commentaires").Preload("Relation").Preload("Tags").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -47,6 +47,48 @@ func CreateRessource(c *gin.Context) {
 		Votes:          0,
 	}
 	models.DB.Create(&ressource)
+
+	c.JSON(http.StatusOK, gin.H{"data": ressource})
+}
+
+//AddTagRessource ajoute un tag à la ressource
+func AddTagRessource(c *gin.Context) {
+	// Get ressource if exist
+	var ressource models.Ressource
+	if err := models.DB.Where("id = ?", c.Param("idRessource")).First(&ressource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Get tag if exist
+	var tag models.Tag
+	if err := models.DB.Where("id = ?", c.Param("idTag")).First(&tag).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	models.DB.Model(&ressource).Association("Tags").Append([]models.Tag{tag})
+
+	c.JSON(http.StatusOK, gin.H{"data": ressource})
+}
+
+//DeleteTagRessource supprime un tag de la ressource
+func DeleteTagRessource(c *gin.Context) {
+	// Get ressource if exist
+	var ressource models.Ressource
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Get tag if exist
+	var tag models.Tag
+	if err := models.DB.Where("id = ?", c.Param("idTag")).First(&tag).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	models.DB.Model(&ressource).Association("Tags").Delete([]models.Tag{tag})
 
 	c.JSON(http.StatusOK, gin.H{"data": ressource})
 }

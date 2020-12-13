@@ -24,9 +24,11 @@ func main() {
 	r.GET("/ressources/:id", controllers.FindRessource)
 	r.PATCH("/ressources/:id", controllers.UpdateRessource)
 	r.DELETE("/ressources/:id", controllers.DeleteRessource)
+	r.DELETE("/ressources/:id/tags/:idTag", controllers.DeleteTagRessource)
 	r.POST("/ressources", controllers.CreateRessource)
+	r.POST("/ressources/tags/:id/:idTag", controllers.AddTagRessource)
 
-	//Routes ressources
+	//Routes commentaires
 	r.GET("/commentaires", controllers.FindCommentaires)
 	r.GET("/commentaires/:id", controllers.FindCommentaire)
 	r.PATCH("/commentaires/:id", controllers.UpdateCommentaire)
@@ -46,5 +48,13 @@ func main() {
 	r.PATCH("/rangs/:id", controllers.UpdateRang)
 	r.DELETE("/rangs/:id", controllers.DeleteRang)
 	r.POST("/rangs", controllers.CreateRang)
+
+	//Routes tag
+	r.GET("/tags", controllers.FindTags)
+	r.GET("/tags/:id", controllers.FindTag)
+	r.PATCH("/tags/:id", controllers.UpdateTag)
+	r.DELETE("/tags/:id", controllers.DeleteTag)
+	r.POST("/tags", controllers.CreateTag)
+
 	r.Run()
 }
