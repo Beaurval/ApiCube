@@ -25,5 +25,13 @@ func main() {
 	r.PATCH("/ressources/:id", controllers.UpdateRessource)
 	r.DELETE("/ressources/:id", controllers.DeleteRessource)
 	r.POST("/ressources", controllers.CreateRessource)
+
+	//Routes ressources
+	r.GET("/commentaires", controllers.FindCommentaires)
+	r.GET("/commentaires/:id", controllers.FindCommentaire)
+	r.PATCH("/commentaires/:id", controllers.UpdateCommentaire)
+	r.DELETE("/commentaires/:id", controllers.DeleteCommentaire)
+	r.POST("/commentaires", controllers.CreateCommentaire)
+
 	r.Run()
 }
