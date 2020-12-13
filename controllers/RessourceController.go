@@ -44,7 +44,7 @@ func CreateRessource(c *gin.Context) {
 		CitoyenID:      input.CitoyenID,
 		TypeRelationID: input.TypeRelationID,
 		Vues:           0,
-		Vote:           0,
+		Votes:          0,
 	}
 	models.DB.Create(&ressource)
 

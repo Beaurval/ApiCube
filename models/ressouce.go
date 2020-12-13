@@ -9,7 +9,7 @@ type Ressource struct {
 	gorm.Model
 	Titre          string
 	Vues           int
-	Vote           int
+	Votes          int
 	Contenu        string
 	CitoyenID      uint
 	TypeRelationID uint
@@ -28,9 +28,9 @@ type CreateRessourceInput struct {
 type UpdateRessourceInput struct {
 	gorm.Model
 	Titre          string `json:"titre"`
-	Contenu        string `json:"contenu"`
 	Vues           int    `json:"vues"`
 	Votes          int    `json:"votes"`
+	Contenu        string `json:"contenu"`
 	TypeRelationID uint   `json:"typeRelationId"`
 	CitoyenID      uint   `json:"citoyenId"`
 }
