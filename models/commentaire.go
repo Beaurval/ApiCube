@@ -8,6 +8,7 @@ import (
 type Commentaire struct {
 	gorm.Model
 	ParentID    *uint
+	CitoyenID   uint
 	Reponses    []Commentaire `gorm:"foreignkey:ParentID"`
 	RessourceID uint
 	Contenu     string
@@ -17,6 +18,7 @@ type Commentaire struct {
 //CreateCommentaireInput model de création de ressource
 type CreateCommentaireInput struct {
 	gorm.Model
+	CitoyenID   uint   `json:"idCitoyen"`
 	ParentID    *uint  `json:"idParent"`
 	RessourceID uint   `json:"idRessource" binding:"required"`
 	Contenu     string `json:"contenu" binding:"required"`

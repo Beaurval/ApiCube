@@ -43,6 +43,7 @@ func CreateCommentaire(c *gin.Context) {
 		Contenu:     input.Contenu,
 		RessourceID: input.RessourceID,
 		ParentID:    input.ParentID,
+		CitoyenID:   input.CitoyenID,
 	}
 	models.DB.Create(&commentaire)
 
