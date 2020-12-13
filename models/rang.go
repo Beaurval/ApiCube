@@ -7,8 +7,7 @@ import (
 //Rang définit le niveau de permission du citoyen
 type Rang struct {
 	gorm.Model
-	Nom     string
-	Citoyen []Citoyen
+	Nom string
 }
 
 // TableName sets the insert table name for this struct type

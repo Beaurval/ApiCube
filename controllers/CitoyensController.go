@@ -11,7 +11,7 @@ import (
 //FindCitoyens Get all citoyens
 func FindCitoyens(c *gin.Context) {
 	var citoyens []models.Citoyen
-	models.DB.Find(&citoyens)
+	models.DB.Preload("Rang").Find(&citoyens)
 
 	c.JSON(http.StatusOK, gin.H{"data": citoyens})
 }
@@ -20,7 +20,7 @@ func FindCitoyens(c *gin.Context) {
 func FindCitoyen(c *gin.Context) {
 	var citoyen models.Citoyen
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&citoyen).Error; err != nil {
+	if err := models.DB.Preload("Rang").Where("id = ?", c.Param("id")).First(&citoyen).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}

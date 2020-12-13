@@ -11,8 +11,10 @@ type Ressource struct {
 	Vues           int
 	Votes          int
 	Contenu        string
-	CitoyenID      uint
 	TypeRelationID uint
+	CitoyenID      uint
+	Redacteur      Citoyen `gorm:"foreignkey:ID"`
+	Commentaires   []Commentaire
 }
 
 //CreateRessourceInput model de création de ressource

@@ -18,6 +18,7 @@ type Citoyen struct {
 	Telephone  string
 	Ville      string
 	RangID     uint
+	Rang       Rang
 }
 
 //CreateCitoyenInput model de création de citoyen
