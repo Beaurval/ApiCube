@@ -40,5 +40,11 @@ func main() {
 	r.DELETE("/typeRelations/:id", controllers.DeleteTypeRelation)
 	r.POST("/typeRelations", controllers.CreateTypeRelation)
 
+	//Routes rang
+	r.GET("/rangs", controllers.FindRangs)
+	r.GET("/rangs/:id", controllers.FindRang)
+	r.PATCH("/rangs/:id", controllers.UpdateRang)
+	r.DELETE("/rangs/:id", controllers.DeleteRang)
+	r.POST("/rangs", controllers.CreateRang)
 	r.Run()
 }
