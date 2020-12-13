@@ -33,5 +33,12 @@ func main() {
 	r.DELETE("/commentaires/:id", controllers.DeleteCommentaire)
 	r.POST("/commentaires", controllers.CreateCommentaire)
 
+	//Routes type de relation
+	r.GET("/typeRelations", controllers.FindTypeRelations)
+	r.GET("/typeRelations/:id", controllers.FindTypeRelation)
+	r.PATCH("/typeRelations/:id", controllers.UpdateTypeRelation)
+	r.DELETE("/typeRelations/:id", controllers.DeleteTypeRelation)
+	r.POST("/typeRelations", controllers.CreateTypeRelation)
+
 	r.Run()
 }

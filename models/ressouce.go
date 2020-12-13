@@ -12,6 +12,7 @@ type Ressource struct {
 	Votes          int
 	Contenu        string
 	TypeRelationID uint
+	Relation       TypeRelation `gorm:"foreignkey:ID"`
 	CitoyenID      uint
 	Redacteur      Citoyen `gorm:"foreignkey:ID"`
 	Commentaires   []Commentaire
