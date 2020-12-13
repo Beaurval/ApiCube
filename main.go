@@ -56,5 +56,12 @@ func main() {
 	r.DELETE("/tags/:id", controllers.DeleteTag)
 	r.POST("/tags", controllers.CreateTag)
 
+	//Routes typeRessources
+	r.GET("/typeRessources", controllers.FindTypeRessources)
+	r.GET("/typeRessources/:id", controllers.FindTypeRessource)
+	r.PATCH("/typeRessources/:id", controllers.UpdateTypeRessource)
+	r.DELETE("/typeRessources/:id", controllers.DeleteTypeRessource)
+	r.POST("/typeRessources", controllers.CreateTypeRessource)
+
 	r.Run()
 }

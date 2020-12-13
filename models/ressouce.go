@@ -7,16 +7,18 @@ import (
 //Ressource publiée par le citoyen
 type Ressource struct {
 	gorm.Model
-	Titre          string
-	Vues           int
-	Votes          int
-	Contenu        string
-	TypeRelationID uint
-	Relation       TypeRelation `gorm:"foreignkey:ID"`
-	CitoyenID      uint
-	Redacteur      Citoyen `gorm:"foreignkey:ID"`
-	Commentaires   []Commentaire
-	Tags           []Tag `gorm:"many2many:tags_ressources;"`
+	Titre           string
+	Vues            int
+	Votes           int
+	Contenu         string
+	TypeRessourceID uint
+	TypeRessource   TypeRessource
+	TypeRelationID  uint
+	Relation        TypeRelation `gorm:"foreignkey:ID"`
+	CitoyenID       uint
+	Redacteur       Citoyen `gorm:"foreignkey:ID"`
+	Commentaires    []Commentaire
+	Tags            []Tag `gorm:"many2many:tags_ressources;"`
 }
 
 //CreateRessourceInput model de création de ressource
