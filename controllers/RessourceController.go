@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"ApiCubes/models"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,7 +12,7 @@ import (
 //FindRessources Récupérer toutes les ressources
 func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
-	models.DB.Preload("Commentaires").Preload("Relation").Preload("Redacteur").Preload("Tags").Find(&ressources)
+	models.DB.Preload("Commentaires").Preload("Relation").Preload("Redacteur").Preload("Tags").Preload("ActionRessources").Find(&ressources)
 
 	c.JSON(http.StatusOK, gin.H{"data": ressources})
 }
@@ -19,7 +21,7 @@ func FindRessources(c *gin.Context) {
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("Commentaires").Preload("Relation").Preload("Tags").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("Commentaires").Preload("Relation").Preload("Tags").Preload("ActionRessources").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -89,6 +91,68 @@ func DeleteTagRessource(c *gin.Context) {
 	}
 
 	models.DB.Model(&ressource).Association("Tags").Delete([]models.Tag{tag})
+
+	c.JSON(http.StatusOK, gin.H{"data": ressource})
+}
+
+//AddActionRessource ajoute un tag à la ressource
+func AddActionRessource(c *gin.Context) {
+	// Get ressource if exist
+	var ressource models.Ressource
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	var input models.CreateActionRessourceInput
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	idRessource, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		// handle error
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	idCitoyen, err := strconv.Atoi(c.Param("idCitoyen"))
+	if err != nil {
+		// handle error
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	models.DB.Model(&ressource).Association("ActionsRessources").Append(&models.ActionRessource{
+		RessourceID: idRessource,
+		CitoyenID:   idCitoyen,
+		Favoris:     input.Favoris,
+		MisDeCote:   input.MisDeCote,
+		Exploite:    input.MisDeCote,
+	})
+
+	c.JSON(http.StatusOK, gin.H{"data": ressource})
+}
+
+//DeleteActionRessource supprime une action de ressource
+func DeleteActionRessource(c *gin.Context) {
+	// Get ressource if exist
+	var ressource models.Ressource
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Get actionRessource if exist
+	var actionRessource models.ActionRessource
+	if err := models.DB.Where("citoyen_id = ?", c.Param("idCitoyen")).Where("ressource_id = ?", c.Param("id")).First(&actionRessource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	models.DB.Model(&ressource).Association("ActionsRessources").Delete([]models.ActionRessource{actionRessource})
 
 	c.JSON(http.StatusOK, gin.H{"data": ressource})
 }

@@ -3,12 +3,15 @@ package main
 import (
 	"ApiCubes/controllers"
 	"ApiCubes/models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
+
+	r.StaticFS("/fichiers", http.Dir("fichiers"))
 
 	models.ConnectDataBase()
 
@@ -19,14 +22,22 @@ func main() {
 	r.POST("/citoyens", controllers.CreateCitoyen)
 	r.DELETE("/citoyens/:id", controllers.DeleteCitoyen)
 
+	//Routes fichier
+	r.POST("/upload/:id", controllers.Upload)
+	r.GET("/files", controllers.FindFiles)
+	r.GET("/files/:id", controllers.FindFile)
+	r.DELETE("/files/:id", controllers.DeleteFile)
+
 	//Routes ressources
 	r.GET("/ressources", controllers.FindRessources)
 	r.GET("/ressources/:id", controllers.FindRessource)
 	r.PATCH("/ressources/:id", controllers.UpdateRessource)
 	r.DELETE("/ressources/:id", controllers.DeleteRessource)
 	r.DELETE("/ressources/:id/tags/:idTag", controllers.DeleteTagRessource)
+	r.DELETE("/ressources/:id/action/:idCitoyen", controllers.DeleteActionRessource)
 	r.POST("/ressources", controllers.CreateRessource)
 	r.POST("/ressources/tags/:id/:idTag", controllers.AddTagRessource)
+	r.POST("/ressources/action/:id/:idCitoyen", controllers.AddActionRessource)
 
 	//Routes commentaires
 	r.GET("/commentaires", controllers.FindCommentaires)
