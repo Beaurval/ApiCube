@@ -16,7 +16,6 @@ type Ressource struct {
 	TypeRelationID    uint
 	Relation          TypeRelation `gorm:"foreignkey:ID"`
 	CitoyenID         uint
-	Redacteur         Citoyen `gorm:"foreignkey:ID"`
 	Commentaires      []Commentaire
 	Tags              []Tag             `gorm:"many2many:tags_ressources;"`
 	ActionsRessources []ActionRessource `gorm:"foreignkey:RessourceID"`

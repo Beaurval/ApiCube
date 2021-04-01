@@ -12,7 +12,7 @@ const ServerAddress = "http://localhost:8080/"
 
 //ConnectDataBase se connecte à la base de données renseignée dans la chaine de connexion
 func ConnectDataBase() {
-	dsn := "root:toor@tcp(127.0.0.1:3306)/projet_cube?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "beaurval:alwayscesi@tcp(mysql-beaurval.alwaysdata.net)/beaurval_apiflutter?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
