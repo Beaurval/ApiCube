@@ -19,6 +19,7 @@ type Citoyen struct {
 	Ville      string
 	RangID     uint
 	Rang       Rang
+	Ressource  []Ressource
 }
 
 //CreateCitoyenInput model de création de citoyen
