@@ -7,13 +7,14 @@ import (
 //TypeRelation Type de relation
 type TypeRelation struct {
 	gorm.Model
-	Nom string
+	Nom       string
+	Ressource []Ressource
 }
 
 //CreateTypeRelationInput model de création de type de relation
 type CreateTypeRelationInput struct {
 	gorm.Model
-	Nom string `json:"nom"`
+	Nom string `binding:"required"`
 }
 
 //UpdateTypeRelationInput model d'update type de relation

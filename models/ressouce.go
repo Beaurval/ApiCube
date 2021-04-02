@@ -24,10 +24,10 @@ type Ressource struct {
 //CreateRessourceInput model de création de ressource
 type CreateRessourceInput struct {
 	gorm.Model
-	Titre          string `json:"titre" binding:"required"`
-	Contenu        string `json:"contenu" binding:"required"`
-	CitoyenID      uint   `json:"citoyenId" binding:"required"`
-	TypeRelationID uint   `json:"typeRelationId" binding:"required"`
+	Titre          string `binding:"required"`
+	Contenu        string `binding:"required"`
+	CitoyenID      uint   `binding:"required"`
+	TypeRelationID uint   `binding:"required"`
 }
 
 //UpdateRessourceInput model pour mettre à jour la ressource

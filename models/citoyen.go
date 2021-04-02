@@ -24,17 +24,17 @@ type Citoyen struct {
 
 //CreateCitoyenInput model de création de citoyen
 type CreateCitoyenInput struct {
-	Adresse    string `json:"adresse" binding:"required"`
-	CodePostal string `json:"cp" binding:"required"`
-	Genre      string `json:"genre" binding:"required"`
-	Mail       string `json:"mail" binding:"required"`
-	MotDePasse string `json:"motDePasse" binding:"required"`
-	Nom        string `json:"nom" binding:"required"`
-	Prenom     string `json:"prenom" binding:"required"`
-	Pseudo     string `json:"pseudo" binding:"required"`
-	Telephone  string `json:"telephone" binding:"required"`
-	Ville      string `json:"ville" binding:"required"`
-	RangID     uint   `json:"RangID" binding:"required"`
+	Adresse    string `binding:"required"`
+	CodePostal string `binding:"required"`
+	Genre      string `binding:"required"`
+	Mail       string `binding:"required"`
+	MotDePasse string `binding:"required"`
+	Nom        string `binding:"required"`
+	Prenom     string `binding:"required"`
+	Pseudo     string `binding:"required"`
+	Telephone  string `binding:"required"`
+	Ville      string `binding:"required"`
+	RangID     uint
 }
 
 //UpdateCitoyenInput model de création de citoyen
