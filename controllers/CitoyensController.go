@@ -92,3 +92,61 @@ func DeleteCitoyen(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
+
+// VoterRessource ajouter un vote à une ressource
+func VoterRessource(c *gin.Context) {
+	// Get model if exist
+	var input models.RessourceVoted
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Get ressource if exist
+	var citoyen models.Citoyen
+	if err := models.DB.Where("id = ?", input.CitoyenID).First(&citoyen).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Get ressource if exist
+	var ressource models.Ressource
+	if err := models.DB.Where("id = ?", input.RessourceID).First(&ressource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	models.DB.Model(&citoyen).Association("RessourcesVoted").Append(&ressource)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}
+
+// VoterCommentaire ajouter un vote à une ressource
+func VoterCommentaire(c *gin.Context) {
+	// Get model if exist
+	var input models.CommentaireVoted
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Get commentaire if exist
+	var commentaire models.Commentaire
+	if err := models.DB.Where("id = ?", input.CommentaireID).First(&commentaire).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Get ressource if exist
+	var citoyen models.Citoyen
+	if err := models.DB.Where("id = ?", input.CitoyenID).First(&citoyen).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	models.DB.Model(&citoyen).Association("CommentairesVoted").Append(&commentaire)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}

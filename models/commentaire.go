@@ -7,12 +7,13 @@ import (
 //Commentaire de ressource
 type Commentaire struct {
 	gorm.Model
-	ParentID    *uint
-	CitoyenID   uint
-	Reponses    []Commentaire `gorm:"foreignkey:ParentID"`
-	RessourceID uint
-	Contenu     string
-	Vote        int
+	ParentID     *uint
+	CitoyenID    uint
+	Reponses     []Commentaire `gorm:"foreignkey:ParentID"`
+	RessourceID  uint
+	Contenu      string
+	Vote         int
+	CitoyenVoted []Citoyen `gorm:"many2many:commentaires_voted;"`
 }
 
 //CreateCommentaireInput model de création de ressource

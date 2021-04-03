@@ -74,5 +74,11 @@ func main() {
 	r.DELETE("/typeRessources/:id", controllers.DeleteTypeRessource)
 	r.POST("/typeRessources", controllers.CreateTypeRessource)
 
+	//Routes votes
+	r.POST("/voteRessources", controllers.VoterRessource)
+	r.POST("/voteCommentaire", controllers.VoterCommentaire)
+	// r.DELETE("/voteRessources/:id", controllers.RetirerVoteRessource)
+	// r.DELETE("/voteCommentaire/:id", controllers.RetirerVoteCommentaire)
+
 	r.Run(":8081")
 }

@@ -18,6 +18,7 @@ type Ressource struct {
 	Commentaires      []Commentaire
 	Tags              []Tag `gorm:"many2many:tags_ressources;"`
 	ActionsRessources []ActionRessource
+	CitoyenVoted      []Citoyen `gorm:"many2many:ressources_voted;"`
 }
 
 //CreateRessourceInput model de création de ressource

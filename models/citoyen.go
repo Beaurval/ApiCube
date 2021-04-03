@@ -7,19 +7,21 @@ import (
 //Citoyen Utilisateur de l'application
 type Citoyen struct {
 	gorm.Model
-	Adresse    string
-	CodePostal string
-	Genre      string
-	Mail       string
-	MotDePasse string
-	Nom        string
-	Prenom     string
-	Pseudo     string
-	Telephone  string
-	Ville      string
-	RangID     uint
-	Rang       Rang
-	Ressource  []Ressource
+	Adresse           string
+	CodePostal        string
+	Genre             string
+	Mail              string
+	MotDePasse        string
+	Nom               string
+	Prenom            string
+	Pseudo            string
+	Telephone         string
+	Ville             string
+	RangID            uint
+	Rang              Rang
+	Ressource         []Ressource
+	RessourcesVoted   []Ressource   `gorm:"many2many:ressources_voted;"`
+	CommentairesVoted []Commentaire `gorm:"many2many:commentaires_voted;"`
 }
 
 //CreateCitoyenInput model de création de citoyen

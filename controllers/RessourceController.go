@@ -12,7 +12,7 @@ import (
 //FindRessources Récupérer toutes les ressources
 func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
-	models.DB.Preload("Commentaires").Preload("Citoyen").Preload("Tags").Find(&ressources)
+	models.DB.Preload("Commentaires").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
 
 	c.JSON(http.StatusOK, gin.H{"data": ressources})
 }
@@ -21,7 +21,7 @@ func FindRessources(c *gin.Context) {
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("Commentaires").Preload("Citoyen").Preload("Tags").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
