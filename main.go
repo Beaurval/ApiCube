@@ -77,8 +77,8 @@ func main() {
 	//Routes votes
 	r.POST("/voteRessources", controllers.VoterRessource)
 	r.POST("/voteCommentaire", controllers.VoterCommentaire)
-	// r.DELETE("/voteRessources/:id", controllers.RetirerVoteRessource)
-	// r.DELETE("/voteCommentaire/:id", controllers.RetirerVoteCommentaire)
+	r.DELETE("/voteRessources", controllers.RetirerVoteRessource)
+	r.DELETE("/voteCommentaire", controllers.RetirerVoteCommentaire)
 
 	r.Run(":8081")
 }
