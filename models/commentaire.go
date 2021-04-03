@@ -18,10 +18,10 @@ type Commentaire struct {
 //CreateCommentaireInput model de création de ressource
 type CreateCommentaireInput struct {
 	gorm.Model
-	CitoyenID   uint   `json:"idCitoyen"`
-	ParentID    *uint  `json:"idParent"`
-	RessourceID uint   `json:"idRessource" binding:"required"`
-	Contenu     string `json:"contenu" binding:"required"`
+	CitoyenID   uint `binding:"required"`
+	ParentID    *uint
+	RessourceID uint   `binding:"required"`
+	Contenu     string `binding:"required"`
 }
 
 //UpdateCommentaireInput model de mise à jour d'un commentaire de ressource

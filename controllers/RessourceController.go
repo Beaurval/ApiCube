@@ -21,7 +21,7 @@ func FindRessources(c *gin.Context) {
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("Commentaires").Preload("Tags").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("Commentaires").Preload("Citoyen").Preload("Tags").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}

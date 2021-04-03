@@ -14,7 +14,7 @@ type Ressource struct {
 	TypeRessourceID   uint
 	TypeRelationID    uint
 	CitoyenID         uint
-	Citoyen           Citoyen
+	Citoyen           Citoyen `gorm:foreignKey:CitoyenID`
 	Commentaires      []Commentaire
 	Tags              []Tag `gorm:"many2many:tags_ressources;"`
 	ActionsRessources []ActionRessource
