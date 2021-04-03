@@ -12,22 +12,22 @@ type Ressource struct {
 	Votes             int
 	Contenu           string
 	TypeRessourceID   uint
-	TypeRessource     TypeRessource
 	TypeRelationID    uint
-	Relation          TypeRelation `gorm:"foreignkey:ID"`
 	CitoyenID         uint
+	Citoyen           Citoyen
 	Commentaires      []Commentaire
-	Tags              []Tag             `gorm:"many2many:tags_ressources;"`
-	ActionsRessources []ActionRessource `gorm:"foreignkey:RessourceID"`
+	Tags              []Tag `gorm:"many2many:tags_ressources;"`
+	ActionsRessources []ActionRessource
 }
 
 //CreateRessourceInput model de création de ressource
 type CreateRessourceInput struct {
 	gorm.Model
-	Titre          string `binding:"required"`
-	Contenu        string `binding:"required"`
-	CitoyenID      uint   `binding:"required"`
-	TypeRelationID uint   `binding:"required"`
+	Titre           string `binding:"required"`
+	Contenu         string `binding:"required"`
+	CitoyenID       uint   `binding:"required"`
+	TypeRelationID  uint   `binding:"required"`
+	TypeRessourceID uint   `binding:"required"`
 }
 
 //UpdateRessourceInput model pour mettre à jour la ressource

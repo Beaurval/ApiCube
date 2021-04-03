@@ -6,9 +6,7 @@ import "gorm.io/gorm"
 type ActionRessource struct {
 	gorm.Model
 	RessourceID int
-	Ressource   Ressource
 	CitoyenID   int
-	Citoyen     Citoyen
 	Favoris     bool
 	MisDeCote   bool
 	Exploite    bool

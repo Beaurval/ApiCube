@@ -12,7 +12,7 @@ import (
 //FindRessources Récupérer toutes les ressources
 func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
-	models.DB.Preload("Commentaires").Preload("Relation").Preload("Redacteur").Preload("Tags").Preload("ActionRessources").Find(&ressources)
+	models.DB.Preload("Commentaires").Preload("Citoyen").Preload("Tags").Find(&ressources)
 
 	c.JSON(http.StatusOK, gin.H{"data": ressources})
 }
@@ -41,12 +41,13 @@ func CreateRessource(c *gin.Context) {
 
 	// Create Ressource
 	ressource := models.Ressource{
-		Titre:          input.Titre,
-		Contenu:        input.Contenu,
-		CitoyenID:      input.CitoyenID,
-		TypeRelationID: input.TypeRelationID,
-		Vues:           0,
-		Votes:          0,
+		Titre:           input.Titre,
+		Contenu:         input.Contenu,
+		CitoyenID:       input.CitoyenID,
+		TypeRelationID:  input.TypeRelationID,
+		TypeRessourceID: input.TypeRessourceID,
+		Vues:            0,
+		Votes:           0,
 	}
 	models.DB.Create(&ressource)
 

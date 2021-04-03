@@ -74,5 +74,5 @@ func main() {
 	r.DELETE("/typeRessources/:id", controllers.DeleteTypeRessource)
 	r.POST("/typeRessources", controllers.CreateTypeRessource)
 
-	r.Run()
+	r.Run(":8081")
 }
