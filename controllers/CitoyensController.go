@@ -124,24 +124,16 @@ func VoterRessource(c *gin.Context) {
 
 // RetirerVoteRessource supprimer le vote d'une ressource
 func RetirerVoteRessource(c *gin.Context) {
-	// Get model if exist
-	var input models.RessourceVoted
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	// Get ressource if exist
 	var citoyen models.Citoyen
-	if err := models.DB.Where("id = ?", input.CitoyenID).First(&citoyen).Error; err != nil {
+	if err := models.DB.Where("id = ?", c.Param("idCitoyen")).First(&citoyen).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
 	// Get ressource if exist
 	var ressource models.Ressource
-	if err := models.DB.Where("id = ?", input.RessourceID).First(&ressource).Error; err != nil {
+	if err := models.DB.Where("id = ?", c.Param("idRessource")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -153,22 +145,15 @@ func RetirerVoteRessource(c *gin.Context) {
 
 // RetirerVoteCommentaire retirer le vote d'un commentaire
 func RetirerVoteCommentaire(c *gin.Context) {
-	// Get model if exist
-	var input models.CommentaireVoted
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
 	var citoyen models.Citoyen
-	if err := models.DB.Where("id = ?", input.CitoyenID).First(&citoyen).Error; err != nil {
+	if err := models.DB.Where("id = ?", c.Param("idCitoyen")).First(&citoyen).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
 	var commentaire models.Commentaire
-	if err := models.DB.Where("id = ?", input.CommentaireID).First(&commentaire).Error; err != nil {
+	if err := models.DB.Where("id = ?", c.Param("idCommentaire")).First(&commentaire).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
