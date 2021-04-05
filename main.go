@@ -96,5 +96,11 @@ func main() {
 	r.DELETE("/voteRessources/:idCitoyen/:idRessource", controllers.RetirerVoteRessource)
 	r.DELETE("/voteCommentaire/:idCitoyen/:idCommentaire", controllers.RetirerVoteCommentaire)
 
+	//Routes relations
+	r.GET("/relations/:id", controllers.FindRelationsDuCitoyen)
+	r.GET("/inrelations/:id", controllers.FindRelationsOuEstLeCitoyen)
+	r.POST("/relations", controllers.AjouterRelation)
+	r.DELETE("/relations/:id", controllers.DeleteRelation)
+
 	r.Run(":8081")
 }

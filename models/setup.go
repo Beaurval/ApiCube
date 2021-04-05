@@ -19,7 +19,7 @@ func ConnectDataBase() {
 		panic("Failed to connect to database!")
 	}
 
-	db.AutoMigrate(&File{}, &Tag{}, &TypeRessource{}, &Rang{}, &Citoyen{}, &TypeRelation{}, &Ressource{}, &Commentaire{}, &ActionRessource{})
+	db.AutoMigrate(&File{}, &Tag{}, &TypeRessource{}, &Rang{}, &Citoyen{}, &TypeRelation{}, &Ressource{}, &Commentaire{}, &ActionRessource{}, &RelationCitoyen{})
 
 	DB = db
 }

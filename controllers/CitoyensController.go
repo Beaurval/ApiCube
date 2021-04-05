@@ -20,7 +20,7 @@ func FindCitoyens(c *gin.Context) {
 func FindCitoyen(c *gin.Context) {
 	var citoyen models.Citoyen
 
-	if err := models.DB.Preload("Rang").Where("id = ?", c.Param("id")).First(&citoyen).Error; err != nil {
+	if err := models.DB.Preload("Rang").Preload("Relations").Preload("Relations.TypeRelation").Preload("InRelations").Preload("InRelations.TypeRelation").Where("id = ?", c.Param("id")).First(&citoyen).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}

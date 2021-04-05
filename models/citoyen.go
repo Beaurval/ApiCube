@@ -20,8 +20,10 @@ type Citoyen struct {
 	RangID            uint
 	Rang              Rang
 	Ressource         []Ressource
-	RessourcesVoted   []Ressource   `gorm:"many2many:ressources_voted;"`
-	CommentairesVoted []Commentaire `gorm:"many2many:commentaires_voted;"`
+	RessourcesVoted   []Ressource       `gorm:"many2many:ressources_voted;"`
+	CommentairesVoted []Commentaire     `gorm:"many2many:commentaires_voted;"`
+	Relations         []RelationCitoyen `gorm:"foreignKey:CitoyenID"`
+	InRelations       []RelationCitoyen `gorm:"foreignKey:CitoyenCibleID"`
 }
 
 //CreateCitoyenInput model de création de citoyen
