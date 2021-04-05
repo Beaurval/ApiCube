@@ -15,6 +15,8 @@ type Ressource struct {
 	TypeRelationID    uint
 	CitoyenID         uint
 	Citoyen           Citoyen
+	CategorieID       uint
+	Categorie         Categorie
 	Commentaires      []Commentaire
 	Tags              []Tag `gorm:"many2many:tags_ressources;"`
 	ActionsRessources []ActionRessource

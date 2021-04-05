@@ -16,15 +16,12 @@ func main() {
 	r.StaticFS("/fichiers", http.Dir("fichiers"))
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://localhost:44369"},
+		AllowAllOrigins:  true,
 		AllowMethods:     []string{"PUT", "PATCH", "POST", "GET", "DELETE"},
 		AllowHeaders:     []string{"Origin", "content-type"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "https://github.com"
-		},
-		MaxAge: 12 * time.Hour,
+		MaxAge:           12 * time.Hour,
 	}))
 
 	models.ConnectDataBase()
@@ -73,6 +70,11 @@ func main() {
 	r.PATCH("/rangs/:id", controllers.UpdateRang)
 	r.DELETE("/rangs/:id", controllers.DeleteRang)
 	r.POST("/rangs", controllers.CreateRang)
+
+	//Routes rang
+	r.GET("/categories", controllers.FindCategories)
+	r.GET("/categories/:id", controllers.FindCategorie)
+	r.POST("/categories", controllers.CreateCategorie)
 
 	//Routes tag
 	r.GET("/tags", controllers.FindTags)
