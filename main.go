@@ -4,7 +4,9 @@ import (
 	"ApiCubes/controllers"
 	"ApiCubes/models"
 	"net/http"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +14,18 @@ func main() {
 	r := gin.Default()
 
 	r.StaticFS("/fichiers", http.Dir("fichiers"))
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://localhost:44369"},
+		AllowMethods:     []string{"PUT", "PATCH", "POST", "GET", "DELETE"},
+		AllowHeaders:     []string{"Origin", "content-type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "https://github.com"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 
 	models.ConnectDataBase()
 

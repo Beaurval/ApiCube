@@ -13,6 +13,7 @@ type Commentaire struct {
 	RessourceID  uint
 	Contenu      string
 	Vote         int
+	Citoyen      Citoyen
 	CitoyenVoted []Citoyen `gorm:"many2many:commentaires_voted;"`
 }
 

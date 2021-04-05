@@ -11,7 +11,7 @@ import (
 //FindCommentaires Récupérer touts les commentaires
 func FindCommentaires(c *gin.Context) {
 	var commentaire []models.Commentaire
-	models.DB.Preload("Reponses").Preload("CitoyenVoted").Find(&commentaire)
+	models.DB.Preload("Reponses").Preload("Citoyen").Preload("CitoyenVoted").Find(&commentaire)
 
 	c.JSON(http.StatusOK, gin.H{"data": commentaire})
 }
@@ -20,7 +20,7 @@ func FindCommentaires(c *gin.Context) {
 func FindCommentaire(c *gin.Context) {
 	var commentaire models.Commentaire
 
-	if err := models.DB.Preload("Reponses").Preload("CommentaireVoted").Where("id = ?", c.Param("id")).First(&commentaire).Error; err != nil {
+	if err := models.DB.Preload("Reponses").Preload("Citoyen").Preload("CitoyenVoted").Where("id = ?", c.Param("id")).First(&commentaire).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}

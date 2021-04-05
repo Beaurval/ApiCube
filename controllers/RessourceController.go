@@ -21,7 +21,7 @@ func FindRessources(c *gin.Context) {
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("CitoyenVoted").Preload("Commentaires.Citoyen").Preload("Commentaires.CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -58,7 +58,8 @@ func CreateRessource(c *gin.Context) {
 func AddTagRessource(c *gin.Context) {
 	// Get ressource if exist
 	var ressource models.Ressource
-	if err := models.DB.Where("id = ?", c.Param("idRessource")).First(&ressource).Error; err != nil {
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+		println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -66,6 +67,7 @@ func AddTagRessource(c *gin.Context) {
 	// Get tag if exist
 	var tag models.Tag
 	if err := models.DB.Where("id = ?", c.Param("idTag")).First(&tag).Error; err != nil {
+		println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
