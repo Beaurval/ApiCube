@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ApiCubes/models"
+	"database/sql"
 	"fmt"
 	"net/http"
 
@@ -12,20 +13,52 @@ import (
 func FindCategories(c *gin.Context) {
 	var categorie []models.Categorie
 	models.DB.Find(&categorie)
+	var result []map[string]interface{}
 
-	c.JSON(http.StatusOK, gin.H{"data": categorie})
+	for i := 0; i < len(categorie); i++ {
+		var commentaires []models.Commentaire
+		var ressources []models.Ressource
+
+		models.DB.Raw("SELECT commentaires.id, commentaires.created_at, commentaires.updated_at,commentaires.deleted_at, "+
+			"commentaires.parent_id, commentaires.citoyen_id, commentaires.ressource_id, commentaires.contenu, commentaires.vote "+
+			"FROM beaurval_apiflutter.ressources "+
+			"INNER JOIN commentaires on commentaires.ressource_id = ressources.id "+
+			"WHERE ressources.categorie_id = @id", sql.Named("id", categorie[i].ID)).Scan(&commentaires)
+		models.DB.Table("ressources").Where("categorie.id = ?", categorie[i].ID).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Scan(&ressources)
+
+		result = append(result, gin.H{
+			"TotalCommentaires": len(commentaires),
+			"TotalRessources":   len(ressources),
+			"Categorie":         categorie[i]})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": result})
 }
 
 //FindCategorie récupère la categorie correspondante à l'id passé en paramètre
 func FindCategorie(c *gin.Context) {
 	var categorie models.Categorie
+	var commentaires []models.Commentaire
+	var ressources []models.Ressource
 
 	if err := models.DB.Where("id = ?", c.Param("id")).First(&categorie).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": categorie})
+	models.DB.Raw("SELECT commentaires.id, commentaires.created_at, commentaires.updated_at,commentaires.deleted_at, "+
+		"commentaires.parent_id, commentaires.citoyen_id, commentaires.ressource_id, commentaires.contenu, commentaires.vote "+
+		"FROM beaurval_apiflutter.ressources "+
+		"INNER JOIN commentaires on commentaires.ressource_id = ressources.id "+
+		"WHERE ressources.categorie_id = @id", sql.Named("id", categorie.ID)).Scan(&commentaires)
+	models.DB.Table("ressources").Where("categorie.id = ?", c.Param("id")).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Scan(&ressources)
+
+	c.JSON(http.StatusOK, gin.H{"data": categorie,
+		"Stats": gin.H{
+			"TotalRessources":   len(ressources),
+			"TotalCommentaires": len(commentaires),
+		},
+	})
 }
 
 //CreateCategorie ajoute unee catégorie
