@@ -7,13 +7,15 @@ import (
 //Categorie Utilisateur de l'application
 type Categorie struct {
 	gorm.Model
-	Nom        string
-	Ressources []Ressource
+	Nom         string
+	Description string
+	Ressources  []Ressource
 }
 
 //CreateCategorieInput model de création de citoyen
 type CreateCategorieInput struct {
-	Nom string
+	Nom         string
+	Description string
 }
 
 // TableName sets the insert table name for this struct type

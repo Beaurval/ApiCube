@@ -24,11 +24,17 @@ func FindCategories(c *gin.Context) {
 			"FROM beaurval_apiflutter.ressources "+
 			"INNER JOIN commentaires on commentaires.ressource_id = ressources.id "+
 			"WHERE ressources.categorie_id = @id", sql.Named("id", categorie[i].ID)).Scan(&commentaires)
-		models.DB.Table("ressources").Where("categorie.id = ?", categorie[i].ID).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Scan(&ressources)
+		models.DB.Table("ressources").Where("categorie.id = ?", categorie[i].ID).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Order("ressources.created_at DESC").Scan(&ressources)
+
+		var lastRessource models.Ressource
+		if len(ressources) > 0 {
+			lastRessource = ressources[0]
+		}
 
 		result = append(result, gin.H{
 			"TotalCommentaires": len(commentaires),
 			"TotalRessources":   len(ressources),
+			"LastRessource":     lastRessource,
 			"Categorie":         categorie[i]})
 	}
 
@@ -51,14 +57,19 @@ func FindCategorie(c *gin.Context) {
 		"FROM beaurval_apiflutter.ressources "+
 		"INNER JOIN commentaires on commentaires.ressource_id = ressources.id "+
 		"WHERE ressources.categorie_id = @id", sql.Named("id", categorie.ID)).Scan(&commentaires)
-	models.DB.Table("ressources").Where("categorie.id = ?", c.Param("id")).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Scan(&ressources)
+	models.DB.Table("ressources").Where("categorie.id = ?", c.Param("id")).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Order("ressources.created_at DESC").Scan(&ressources)
 
-	c.JSON(http.StatusOK, gin.H{"data": categorie,
-		"Stats": gin.H{
-			"TotalRessources":   len(ressources),
-			"TotalCommentaires": len(commentaires),
-		},
-	})
+	var lastRessource models.Ressource
+	if len(ressources) > 0 {
+		lastRessource = ressources[0]
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": gin.H{
+		"Categorie":         categorie,
+		"TotalRessources":   len(ressources),
+		"TotalCommentaires": len(commentaires),
+		"LastRessource":     lastRessource,
+	}})
 }
 
 //CreateCategorie ajoute unee catégorie
@@ -74,7 +85,8 @@ func CreateCategorie(c *gin.Context) {
 
 	// Create type relation
 	rang := models.Categorie{
-		Nom: input.Nom,
+		Nom:         input.Nom,
+		Description: input.Description,
 	}
 	models.DB.Create(&rang)
 

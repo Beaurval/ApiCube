@@ -12,7 +12,7 @@ import (
 //FindRessources Récupérer toutes les ressources
 func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
-	models.DB.Preload("Commentaires").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
+	models.DB.Preload("Commentaires").Preload("Categorie").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
 
 	c.JSON(http.StatusOK, gin.H{"data": ressources})
 }
@@ -21,7 +21,7 @@ func FindRessources(c *gin.Context) {
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("CitoyenVoted").Preload("Commentaires.Citoyen").Preload("Commentaires.CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("CitoyenVoted").Preload("Categorie").Preload("Commentaires.Citoyen").Preload("Commentaires.CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -35,6 +35,7 @@ func CreateRessource(c *gin.Context) {
 	var input models.CreateRessourceInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
+		println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
