@@ -31,6 +31,7 @@ type CreateRessourceInput struct {
 	CitoyenID       uint   `binding:"required"`
 	TypeRelationID  uint   `binding:"required"`
 	TypeRessourceID uint   `binding:"required"`
+	CategorieID     uint   `binding:"required"`
 }
 
 //UpdateRessourceInput model pour mettre à jour la ressource
