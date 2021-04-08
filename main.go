@@ -57,7 +57,6 @@ func main() {
 		api.GET("/citoyens/:id", controllers.FindCitoyen)
 		api.PATCH("/citoyens/:id", controllers.UpdateCitoyen)
 		api.POST("/citoyens", controllers.CreateCitoyen)
-		api.DELETE("/citoyens/:id", controllers.DeleteCitoyen)
 
 		//Routes fichier
 		api.POST("/upload/:id", controllers.Upload)
@@ -68,10 +67,7 @@ func main() {
 		//Routes ressources
 		api.GET("/ressources", controllers.FindRessources)
 		api.GET("/ressources/:id", controllers.FindRessource)
-		api.PATCH("/ressources/:id", controllers.UpdateRessource)
-		api.DELETE("/ressources/:id", controllers.DeleteRessource)
-		api.DELETE("/ressources/:id/tags/:idTag", controllers.DeleteTagRessource)
-		api.DELETE("/ressources/:id/action/:idCitoyen", controllers.DeleteActionRessource)
+
 		api.POST("/ressources", controllers.CreateRessource)
 		api.POST("/ressources/tags/:id/:idTag", controllers.AddTagRessource)
 		api.POST("/ressources/action/:id/:idCitoyen", controllers.AddActionRessource)
@@ -79,28 +75,15 @@ func main() {
 		//Routes commentaires
 		api.GET("/commentaires", controllers.FindCommentaires)
 		api.GET("/commentaires/:id", controllers.FindCommentaire)
-		api.PATCH("/commentaires/:id", controllers.UpdateCommentaire)
-		api.DELETE("/commentaires/:id", controllers.DeleteCommentaire)
 		api.POST("/commentaires", controllers.CreateCommentaire)
 
 		//Routes type de relation
 		api.GET("/typeRelations", controllers.FindTypeRelations)
 		api.GET("/typeRelations/:id", controllers.FindTypeRelation)
-		api.PATCH("/typeRelations/:id", controllers.UpdateTypeRelation)
-		api.DELETE("/typeRelations/:id", controllers.DeleteTypeRelation)
-		api.POST("/typeRelations", controllers.CreateTypeRelation)
 
 		//Routes rang
 		api.GET("/rangs", controllers.FindRangs)
 		api.GET("/rangs/:id", controllers.FindRang)
-		api.PATCH("/rangs/:id", controllers.UpdateRang)
-		api.DELETE("/rangs/:id", controllers.DeleteRang)
-		api.POST("/rangs", controllers.CreateRang)
-
-		//Routes rang
-		api.GET("/categories", controllers.FindCategories)
-		api.GET("/categories/:id", controllers.FindCategorie)
-		api.POST("/categories", controllers.CreateCategorie)
 
 		//Routes tag
 		api.GET("/tags", controllers.FindTags)
@@ -128,14 +111,33 @@ func main() {
 		api.POST("/relations", controllers.AjouterRelation)
 		api.DELETE("/relations/:id", controllers.DeleteRelation)
 
+		//Routes categories
+		api.GET("/categories", controllers.FindCategories)
+		api.GET("/categories/:id", controllers.FindCategorie)
+
 		api.Use(modMiddleware.MiddlewareFunc())
 		{
+			api.PATCH("/commentaires/:id", controllers.UpdateCommentaire)
+			api.DELETE("/commentaires/:id", controllers.DeleteCommentaire)
 		}
 		api.Use(adminMiddleware.MiddlewareFunc())
 		{
+			api.PATCH("/ressources/:id", controllers.UpdateRessource)
+			api.DELETE("/ressources/:id", controllers.DeleteRessource)
+			api.DELETE("/ressources/:id/tags/:idTag", controllers.DeleteTagRessource)
+			api.DELETE("/ressources/:id/action/:idCitoyen", controllers.DeleteActionRessource)
+			api.POST("/categories", controllers.CreateCategorie)
+			api.DELETE("/citoyens/:id", controllers.DeleteCitoyen)
+
 		}
 		api.Use(superAMiddleware.MiddlewareFunc())
 		{
+			api.PATCH("/rangs/:id", controllers.UpdateRang)
+			api.DELETE("/rangs/:id", controllers.DeleteRang)
+			api.POST("/rangs", controllers.CreateRang)
+			api.PATCH("/typeRelations/:id", controllers.UpdateTypeRelation)
+			api.DELETE("/typeRelations/:id", controllers.DeleteTypeRelation)
+			api.POST("/typeRelations", controllers.CreateTypeRelation)
 		}
 	}
 

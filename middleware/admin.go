@@ -1,6 +1,11 @@
 package middleware
 
 import (
+	"ApiCubes/models"
+	"log"
+	"time"
+
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +22,7 @@ func InitAdmin() *jwt.GinJWTMiddleware {
 			if v, ok := data.(*User); ok {
 				return jwt.MapClaims{
 					identityKey: v.UserName,
-					"RangID": v.RangID,
+					"RangID":    v.RangID,
 				}
 			}
 			return jwt.MapClaims{}
@@ -26,7 +31,7 @@ func InitAdmin() *jwt.GinJWTMiddleware {
 			claims := jwt.ExtractClaims(c)
 			return &User{
 				UserName: claims[identityKey].(string),
-				RangID: uint(claims["RangID"].(float64)),
+				RangID:   uint(claims["RangID"].(float64)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
