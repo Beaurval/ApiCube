@@ -44,17 +44,17 @@ type CreateCitoyenInput struct {
 //UpdateCitoyenInput model de création de citoyen
 type UpdateCitoyenInput struct {
 	gorm.Model
-	Adresse    string `json:"adresse"`
-	CodePostal string `json:"cp"`
-	Genre      string `json:"genre"`
-	Mail       string `json:"mail"`
-	MotDePasse string `json:"motDePasse"`
-	Nom        string `json:"nom"`
-	Prenom     string `json:"prenom"`
-	Pseudo     string `json:"pseudo"`
-	Telephone  string `json:"telephone"`
-	Ville      string `json:"ville"`
-	RangID     uint   `json:"RangID"`
+	Adresse    string
+	CodePostal string
+	Genre      string
+	Mail       string
+	MotDePasse string
+	Nom        string
+	Prenom     string
+	Pseudo     string
+	Telephone  string
+	Ville      string
+	RangID     uint
 }
 
 // TableName sets the insert table name for this struct type
