@@ -37,6 +37,7 @@ func InitAuth() *jwt.GinJWTMiddleware {
 			if v, ok := data.(*User); ok {
 				return jwt.MapClaims{
 					identityKey: v.UserName,
+					"RangID": v.RangID,
 				}
 			}
 			return jwt.MapClaims{}
@@ -45,6 +46,7 @@ func InitAuth() *jwt.GinJWTMiddleware {
 			claims := jwt.ExtractClaims(c)
 			return &User{
 				UserName: claims[identityKey].(string),
+				RangID: uint(claims["RangID"].(float64)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -60,23 +62,21 @@ func InitAuth() *jwt.GinJWTMiddleware {
 
 			userID := loginVals.Mail
 			password := loginVals.Password
+			rangID := citoyen.RangID
 
 			if userID == citoyen.Mail && password == citoyen.MotDePasse {
 				return &User{
+					RangID:    rangID,
 					UserName:  userID,
 					LastName:  citoyen.Nom,
 					FirstName: citoyen.Prenom,
-					RangID:    citoyen.RangID,
 				}, nil
 			}
 
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			if v, ok := data.(*User); ok && v.RangID >= 3 {
-				return true
-			}
-			return false
+			return true
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{

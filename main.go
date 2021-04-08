@@ -22,7 +22,9 @@ func main() {
 	models.ConnectDataBase()
 
 	authMiddleware := middleware.InitAuth()
-	//adminMiddleware := middleware.InitAdmin()
+	modMiddleware := middleware.InitMod()
+	adminMiddleware := middleware.InitAdmin()
+	superAMiddleware := middleware.InitSuperAdm()
 
 	r.POST("/login", authMiddleware.LoginHandler)
 
@@ -51,7 +53,7 @@ func main() {
 		models.ConnectDataBase()
 
 		//Routes citoyens
-
+		api.GET("/citoyens", controllers.FindCitoyens)
 		api.GET("/citoyens/:id", controllers.FindCitoyen)
 		api.PATCH("/citoyens/:id", controllers.UpdateCitoyen)
 		api.POST("/citoyens", controllers.CreateCitoyen)
@@ -125,13 +127,16 @@ func main() {
 		api.GET("/inrelations/:id", controllers.FindRelationsOuEstLeCitoyen)
 		api.POST("/relations", controllers.AjouterRelation)
 		api.DELETE("/relations/:id", controllers.DeleteRelation)
-	}
 
-	authMiddleware.Authorizator = middleware.Authorizator
-
-	api.Use(authMiddleware.MiddlewareFunc())
-	{
-		api.GET("/citoyens", controllers.FindCitoyens)
+		api.Use(modMiddleware.MiddlewareFunc())
+		{
+		}
+		api.Use(adminMiddleware.MiddlewareFunc())
+		{
+		}
+		api.Use(superAMiddleware.MiddlewareFunc())
+		{
+		}
 	}
 
 	if err := http.ListenAndServe(":8081", r); err != nil {

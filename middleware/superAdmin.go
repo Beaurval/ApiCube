@@ -22,6 +22,7 @@ func InitSuperAdm() *jwt.GinJWTMiddleware {
 			if v, ok := data.(*User); ok {
 				return jwt.MapClaims{
 					identityKey: v.UserName,
+					"RangID": v.RangID,
 				}
 			}
 			return jwt.MapClaims{}
@@ -30,6 +31,7 @@ func InitSuperAdm() *jwt.GinJWTMiddleware {
 			claims := jwt.ExtractClaims(c)
 			return &User{
 				UserName: claims[identityKey].(string),
+				RangID: uint(claims["RangID"].(float64)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -57,7 +59,10 @@ func InitSuperAdm() *jwt.GinJWTMiddleware {
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			return true
+			if v, ok := data.(*User); ok && v.RangID == 4 {
+				return true
+			}
+			return false
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
