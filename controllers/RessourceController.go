@@ -177,8 +177,18 @@ func UpdateRessource(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	models.DB.Model(&ressource).Updates(input)
+	fmt.Printf("%v+\n", input)
+	models.DB.Model(&ressource).Updates(map[string]interface{}{
+		"Titre":           input.Titre,
+		"Vues":            input.Vues,
+		"Votes":           input.Votes,
+		"ValidationAdmin": input.ValidationAdmin,
+		"Contenu":         input.Contenu,
+		"CitoyenID":       input.CitoyenID,
+		"CategorieID":     input.CategorieID,
+		"TypeRelationID":  input.TypeRelationID,
+		"TypeRessourceID": input.TypeRessourceID,
+	})
 
 	c.JSON(http.StatusOK, gin.H{"data": ressource})
 }

@@ -14,6 +14,7 @@ type Ressource struct {
 	TypeRessourceID   uint
 	TypeRelationID    uint
 	CitoyenID         uint
+	ValidationAdmin   *bool
 	Citoyen           Citoyen
 	CategorieID       uint
 	Categorie         Categorie
@@ -36,13 +37,15 @@ type CreateRessourceInput struct {
 
 //UpdateRessourceInput model pour mettre à jour la ressource
 type UpdateRessourceInput struct {
-	gorm.Model
-	Titre          string `json:"titre"`
-	Vues           int    `json:"vues"`
-	Votes          int    `json:"votes"`
-	Contenu        string `json:"contenu"`
-	TypeRelationID uint   `json:"typeRelationId"`
-	CitoyenID      uint   `json:"citoyenId"`
+	Titre           string
+	Vues            int
+	Votes           int
+	ValidationAdmin *bool `gorm:"type:boolean"`
+	Contenu         string
+	TypeRelationID  uint
+	CitoyenID       uint
+	CategorieID     uint
+	TypeRessourceID uint
 }
 
 // TableName sets the insert table name for this struct type

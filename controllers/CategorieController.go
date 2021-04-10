@@ -23,8 +23,8 @@ func FindCategories(c *gin.Context) {
 			"commentaires.parent_id, commentaires.citoyen_id, commentaires.ressource_id, commentaires.contenu, commentaires.vote "+
 			"FROM beaurval_apiflutter.ressources "+
 			"INNER JOIN commentaires on commentaires.ressource_id = ressources.id "+
-			"WHERE ressources.categorie_id = @id", sql.Named("id", categorie[i].ID)).Scan(&commentaires)
-		models.DB.Table("ressources").Where("categorie.id = ?", categorie[i].ID).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Order("ressources.created_at DESC").Scan(&ressources)
+			"WHERE ressources.validation_admin = true ressources.categorie_id = @id", sql.Named("id", categorie[i].ID)).Scan(&commentaires)
+		models.DB.Table("ressources").Where("ressources.validation_admin = true").Where("categorie.id = ?", categorie[i].ID).Select("*").Joins("left join categorie on ressources.categorie_id = categorie.id").Order("ressources.created_at DESC").Scan(&ressources)
 
 		var lastRessource models.Ressource
 		if len(ressources) > 0 {

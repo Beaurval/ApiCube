@@ -38,7 +38,6 @@ type CreateCitoyenInput struct {
 	Pseudo     string `binding:"required"`
 	Telephone  string `binding:"required"`
 	Ville      string `binding:"required"`
-	RangID     uint
 }
 
 //UpdateCitoyenInput model de création de citoyen

@@ -72,7 +72,7 @@ func CreateCitoyen(c *gin.Context) {
 		Adresse:    input.Adresse,
 		Pseudo:     input.Pseudo,
 		Telephone:  input.Telephone,
-		RangID:     input.RangID,
+		RangID:     1,
 	}
 	models.DB.Create(&citoyen)
 

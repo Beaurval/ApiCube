@@ -47,6 +47,13 @@ func main() {
 	r.GET("/typeRessources", controllers.FindTypeRessources)
 	r.GET("/typeRessources/:id", controllers.FindTypeRessource)
 
+	//Routes rang
+	r.GET("/rangs", controllers.FindRangs)
+	r.GET("/rangs/:id", controllers.FindRang)
+
+	//Inscription
+	r.POST("/citoyens", controllers.CreateCitoyen)
+
 	r.POST("/login", authMiddleware.LoginHandler)
 
 	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
@@ -78,7 +85,6 @@ func main() {
 			api.GET("/citoyens", controllers.FindCitoyens)
 			api.GET("/citoyens/:id", controllers.FindCitoyen)
 			api.PATCH("/citoyens/:id", controllers.UpdateCitoyen)
-			api.POST("/citoyens", controllers.CreateCitoyen)
 
 			//Routes fichier
 			api.POST("/upload/:id", controllers.Upload)
@@ -94,10 +100,6 @@ func main() {
 			api.GET("/commentaires", controllers.FindCommentaires)
 			api.GET("/commentaires/:id", controllers.FindCommentaire)
 			api.POST("/commentaires", controllers.CreateCommentaire)
-
-			//Routes rang
-			api.GET("/rangs", controllers.FindRangs)
-			api.GET("/rangs/:id", controllers.FindRang)
 
 			api.PATCH("/tags/:id", controllers.UpdateTag)
 			api.DELETE("/tags/:id", controllers.DeleteTag)
