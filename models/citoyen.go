@@ -22,6 +22,7 @@ type Citoyen struct {
 	Ressource         []Ressource
 	RessourcesVoted   []Ressource       `gorm:"many2many:ressources_voted;"`
 	CommentairesVoted []Commentaire     `gorm:"many2many:commentaires_voted;"`
+	RessourcesViewed  []Ressource       `gorm:"many2many:ressources_views;"`
 	Relations         []RelationCitoyen `gorm:"foreignKey:CitoyenID"`
 	InRelations       []RelationCitoyen `gorm:"foreignKey:CitoyenCibleID"`
 }

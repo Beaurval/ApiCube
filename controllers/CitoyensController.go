@@ -122,6 +122,35 @@ func VoterRessource(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
 
+// VoterRessource ajouter un vote à une ressource
+func ViewRessource(c *gin.Context) {
+	// Get model if exist
+	var input models.RessourceViewed
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Get ressource if exist
+	var citoyen models.Citoyen
+	if err := models.DB.Where("id = ?", input.CitoyenID).First(&citoyen).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	// Get ressource if exist
+	var ressource models.Ressource
+	if err := models.DB.Where("id = ?", input.RessourceID).First(&ressource).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	models.DB.Model(&citoyen).Association("RessourcesViewed").Append(&ressource)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}
+
 // RetirerVoteRessource supprimer le vote d'une ressource
 func RetirerVoteRessource(c *gin.Context) {
 	// Get ressource if exist

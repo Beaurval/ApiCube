@@ -27,6 +27,7 @@ func main() {
 	superAMiddleware := middleware.InitSuperAdm()
 
 	//Publics routes
+	r.GET("/citoyens", controllers.FindCitoyens)
 	//Routes categories
 	r.GET("/categories", controllers.FindCategories)
 	r.GET("/categories/:id", controllers.FindCategorie)
@@ -82,9 +83,9 @@ func main() {
 			models.ConnectDataBase()
 
 			//Routes citoyens
-			api.GET("/citoyens", controllers.FindCitoyens)
 			api.GET("/citoyens/:id", controllers.FindCitoyen)
 			api.PATCH("/citoyens/:id", controllers.UpdateCitoyen)
+			api.POST("/citoyens/views", controllers.ViewRessource)
 
 			//Routes fichier
 			api.POST("/upload/:id", controllers.Upload)

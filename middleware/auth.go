@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"ApiCubes/models"
+	"fmt"
 	"log"
 	"time"
 
@@ -37,7 +38,7 @@ func InitAuth() *jwt.GinJWTMiddleware {
 			if v, ok := data.(*User); ok {
 				return jwt.MapClaims{
 					identityKey: v.UserName,
-					"RangID": v.RangID,
+					"RangID":    v.RangID,
 				}
 			}
 			return jwt.MapClaims{}
@@ -46,7 +47,7 @@ func InitAuth() *jwt.GinJWTMiddleware {
 			claims := jwt.ExtractClaims(c)
 			return &User{
 				UserName: claims[identityKey].(string),
-				RangID: uint(claims["RangID"].(float64)),
+				RangID:   uint(claims["RangID"].(float64)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -55,8 +56,10 @@ func InitAuth() *jwt.GinJWTMiddleware {
 				return "", jwt.ErrMissingLoginValues
 			}
 			var citoyen models.Citoyen
+			fmt.Printf("%+v\n", citoyen)
 
 			if err := models.DB.Where("mail = ?", loginVals.Mail).First(&citoyen).Error; err != nil {
+
 				return nil, jwt.ErrFailedAuthentication
 			}
 

@@ -1,27 +1,28 @@
 package models
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
 //Ressource publiée par le citoyen
 type Ressource struct {
 	gorm.Model
-	Titre             string
-	Vues              int
-	Votes             int
-	Contenu           string
-	TypeRessourceID   uint
-	TypeRelationID    uint
-	CitoyenID         uint
-	ValidationAdmin   *bool
-	Citoyen           Citoyen
-	CategorieID       uint
-	Categorie         Categorie
-	Commentaires      []Commentaire
-	Tags              []Tag `gorm:"many2many:tags_ressources;"`
-	ActionsRessources []ActionRessource
-	CitoyenVoted      []Citoyen `gorm:"many2many:ressources_voted;"`
+	Titre                  string
+	Contenu                string
+	TypeRessourceID        uint
+	TypeRelationID         uint
+	CitoyenID              uint
+	ValidationAdmin        *bool
+	Citoyen                Citoyen
+	CategorieID            uint
+	Categorie              Categorie
+	Commentaires           []Commentaire
+	Tags                   []Tag `gorm:"many2many:tags_ressources;"`
+	ActionsRessources      []ActionRessource
+	CitoyenVoted           []Citoyen `gorm:"many2many:ressources_voted;"`
+	CitoyenViewedRessource []Citoyen `gorm:"many2many:ressources_views;"`
 }
 
 //CreateRessourceInput model de création de ressource
@@ -46,6 +47,28 @@ type UpdateRessourceInput struct {
 	CitoyenID       uint
 	CategorieID     uint
 	TypeRessourceID uint
+}
+
+type RessourceDisplay struct {
+	ID                uint
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
+	DeletedAt         time.Time
+	Titre             string
+	Contenu           string
+	Vues              int
+	Votes             int
+	CommentairesCount int
+	TypeRessourceID   uint
+	TypeRelationID    uint
+	CitoyenID         uint
+	ValidationAdmin   *bool
+	Citoyen           Citoyen
+	CategorieID       uint
+	Categorie         Categorie
+	Commentaires      []Commentaire
+	CitoyenVoted      []Citoyen
+	Tags              []Tag `gorm:"many2many:tags_ressources;"`
 }
 
 // TableName sets the insert table name for this struct type

@@ -12,21 +12,67 @@ import (
 //FindRessources Récupérer toutes les ressources
 func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
-	models.DB.Preload("Commentaires").Preload("Categorie").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
+	var result []models.RessourceDisplay
 
-	c.JSON(http.StatusOK, gin.H{"data": ressources})
+	models.DB.Preload("Commentaires").Preload("CitoyenViewedRessource").Preload("Categorie").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
+
+	for i := 0; i < len(ressources); i++ {
+		result = append(result, models.RessourceDisplay{
+			ID:                ressources[i].ID,
+			DeletedAt:         ressources[i].DeletedAt.Time,
+			CreatedAt:         ressources[i].CreatedAt,
+			UpdatedAt:         ressources[i].UpdatedAt,
+			Titre:             ressources[i].Titre,
+			Contenu:           ressources[i].Contenu,
+			Vues:              len(ressources[i].CitoyenViewedRessource),
+			Votes:             len(ressources[i].CitoyenVoted),
+			CommentairesCount: len(ressources[i].Commentaires),
+			TypeRessourceID:   ressources[i].TypeRessourceID,
+			TypeRelationID:    ressources[i].TypeRelationID,
+			CitoyenID:         ressources[i].CitoyenID,
+			ValidationAdmin:   ressources[i].ValidationAdmin,
+			Citoyen:           ressources[i].Citoyen,
+			CategorieID:       ressources[i].CategorieID,
+			Categorie:         ressources[i].Categorie,
+			Commentaires:      ressources[i].Commentaires,
+			Tags:              ressources[i].Tags,
+		})
+	}
+	c.JSON(http.StatusOK, gin.H{"data": result})
 }
 
 //FindRessource récupère la ressource correspondant à l'id passé en paramètre
 func FindRessource(c *gin.Context) {
 	var ressource models.Ressource
 
-	if err := models.DB.Preload("CitoyenVoted").Preload("Categorie").Preload("Commentaires.Citoyen").Preload("Commentaires.CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
+	if err := models.DB.Preload("CitoyenViewedRessource").Preload("CitoyenVoted").Preload("Categorie").Preload("Commentaires.Citoyen").Preload("Commentaires.CitoyenVoted").Preload("Citoyen").Preload("Tags").Preload("Commentaires").Where("id = ?", c.Param("id")).First(&ressource).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": ressource})
+	var model = models.RessourceDisplay{
+		ID:                ressource.ID,
+		DeletedAt:         ressource.DeletedAt.Time,
+		CreatedAt:         ressource.CreatedAt,
+		UpdatedAt:         ressource.UpdatedAt,
+		Titre:             ressource.Titre,
+		Contenu:           ressource.Contenu,
+		Vues:              len(ressource.CitoyenViewedRessource),
+		Votes:             len(ressource.CitoyenVoted),
+		CommentairesCount: len(ressource.Commentaires),
+		TypeRessourceID:   ressource.TypeRessourceID,
+		TypeRelationID:    ressource.TypeRelationID,
+		CitoyenID:         ressource.CitoyenID,
+		ValidationAdmin:   ressource.ValidationAdmin,
+		Citoyen:           ressource.Citoyen,
+		CategorieID:       ressource.CategorieID,
+		Categorie:         ressource.Categorie,
+		CitoyenVoted:      ressource.CitoyenVoted,
+		Commentaires:      ressource.Commentaires,
+		Tags:              ressource.Tags,
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": model})
 }
 
 //CreateRessource Ajoute une nouvelle ressource
@@ -47,8 +93,6 @@ func CreateRessource(c *gin.Context) {
 		CitoyenID:       input.CitoyenID,
 		TypeRelationID:  input.TypeRelationID,
 		TypeRessourceID: input.TypeRessourceID,
-		Vues:            0,
-		Votes:           0,
 		CategorieID:     input.CategorieID,
 	}
 	models.DB.Create(&ressource)
