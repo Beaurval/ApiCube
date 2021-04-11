@@ -120,6 +120,7 @@ func main() {
 			api.GET("/relations/:id", controllers.FindRelationsDuCitoyen)
 			api.GET("/inrelations/:id", controllers.FindRelationsOuEstLeCitoyen)
 			api.POST("/relations", controllers.AjouterRelation)
+			api.PATCH("/relations", controllers.UpdateRelation)
 			api.DELETE("/relations/:id", controllers.DeleteRelation)
 
 			api.Use(modMiddleware.MiddlewareFunc())
