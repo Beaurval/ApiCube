@@ -8,6 +8,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func FindCitoyenByMail(c *gin.Context) {
+	var citoyen models.Citoyen
+
+	// Validate input
+	var input models.CitoyenByMailInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := models.DB.Preload("Rang").Preload("Relations").Preload("Relations.TypeRelation").Preload("InRelations").Preload("InRelations.TypeRelation").Where("mail = ?", input.Mail).First(&citoyen).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": citoyen})
+}
+
 //FindCitoyens Get all citoyens
 func FindCitoyens(c *gin.Context) {
 	var citoyens []models.Citoyen

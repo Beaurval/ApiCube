@@ -57,6 +57,10 @@ type UpdateCitoyenInput struct {
 	RangID     uint
 }
 
+type CitoyenByMailInput struct {
+	Mail string
+}
+
 // TableName sets the insert table name for this struct type
 func (c *Citoyen) TableName() string {
 	return "citoyens"

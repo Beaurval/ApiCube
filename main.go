@@ -28,6 +28,7 @@ func main() {
 
 	//Publics routes
 	r.GET("/citoyens", controllers.FindCitoyens)
+	r.GET("/citoyenByMail", controllers.FindCitoyenByMail)
 	//Routes categories
 	r.GET("/categories", controllers.FindCategories)
 	r.GET("/categories/:id", controllers.FindCategorie)
