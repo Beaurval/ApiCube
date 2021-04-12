@@ -11,14 +11,7 @@ import (
 func FindCitoyenByMail(c *gin.Context) {
 	var citoyen models.Citoyen
 
-	// Validate input
-	var input models.CitoyenByMailInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := models.DB.Preload("Rang").Preload("Relations").Preload("Relations.TypeRelation").Preload("InRelations").Preload("InRelations.TypeRelation").Where("mail = ?", input.Mail).First(&citoyen).Error; err != nil {
+	if err := models.DB.Preload("Rang").Preload("Relations").Preload("Relations.TypeRelation").Preload("InRelations").Preload("InRelations.TypeRelation").Where("mail = ?", c.Request.URL.Query()["Mail"]).First(&citoyen).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
