@@ -14,7 +14,7 @@ func FindRessources(c *gin.Context) {
 	var ressources []models.Ressource
 	var result []models.RessourceDisplay
 
-	models.DB.Preload("Commentaires").Preload("CitoyenViewedRessource").Preload("Categorie").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
+	models.DB.Preload("Commentaires").Preload("TypeRelation").Preload("CitoyenViewedRessource").Preload("Categorie").Preload("CitoyenVoted").Preload("Citoyen").Preload("Tags").Find(&ressources)
 
 	for i := 0; i < len(ressources); i++ {
 		result = append(result, models.RessourceDisplay{
@@ -29,6 +29,7 @@ func FindRessources(c *gin.Context) {
 			CommentairesCount: len(ressources[i].Commentaires),
 			TypeRessourceID:   ressources[i].TypeRessourceID,
 			TypeRelationID:    ressources[i].TypeRelationID,
+			TypeRelation:      ressources[i].TypeRelation,
 			CitoyenID:         ressources[i].CitoyenID,
 			ValidationAdmin:   ressources[i].ValidationAdmin,
 			Citoyen:           ressources[i].Citoyen,

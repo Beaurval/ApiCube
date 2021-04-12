@@ -130,6 +130,7 @@ func main() {
 			}
 			api.Use(adminMiddleware.MiddlewareFunc())
 			{
+				api.GET("/allrelations", controllers.GetAllRelations)
 				api.PATCH("/ressources/:id", controllers.UpdateRessource)
 				api.DELETE("/ressources/:id", controllers.DeleteRessource)
 				api.DELETE("/ressources/:id/tags/:idTag", controllers.DeleteTagRessource)

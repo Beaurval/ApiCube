@@ -18,6 +18,7 @@ type Ressource struct {
 	Citoyen                Citoyen
 	CategorieID            uint
 	Categorie              Categorie
+	TypeRelation           TypeRelation
 	Commentaires           []Commentaire
 	Tags                   []Tag `gorm:"many2many:tags_ressources;"`
 	ActionsRessources      []ActionRessource
@@ -64,6 +65,7 @@ type RessourceDisplay struct {
 	CitoyenID         uint
 	ValidationAdmin   *bool
 	Citoyen           Citoyen
+	TypeRelation      TypeRelation
 	CategorieID       uint
 	Categorie         Categorie
 	Commentaires      []Commentaire

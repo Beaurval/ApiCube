@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func GetAllRelations(c *gin.Context) {
+	var relationsCitoyen []models.RelationCitoyen
+
+	models.DB.Preload("TypeRelation").Preload("Citoyen").Preload("CitoyenCible").Find(&relationsCitoyen)
+
+	c.JSON(http.StatusOK, gin.H{"data": relationsCitoyen})
+}
+
 func FindRelationsDuCitoyen(c *gin.Context) {
 	var relationsCitoyen []models.RelationCitoyen
 
